@@ -54,8 +54,12 @@ def menuColumAssign():
                        "Assign columns to data file", exit_option_text="Back")
 
     for i in range(0, len(GENERATOR.COLUMNS)):
-        function_item = FunctionItem(
-            GENERATOR.COLUMNS[i] + " - " + GENERATOR.FILES[i], setFileForColumn, [i])
+        if(i < len(GENERATOR.FILES)):
+            function_item = FunctionItem(
+                GENERATOR.COLUMNS[i] + " - " + GENERATOR.FILES[i], setFileForColumn, [i])
+        else:
+            function_item = FunctionItem(
+                GENERATOR.COLUMNS[i] + " - NONE", setFileForColumn, [i])
         menu.append_item(function_item)
 
     menu.show()
@@ -65,18 +69,24 @@ def menuColumAssign():
 def addColumn():
     newColumn = input("Enter column name: ")
     GENERATOR.COLUMNS.append(newColumn)
+    GENERATOR.FILES.append("NONE")
 # -------------------------------------------------------------------------------------------------
 
 
 def deleteColumn():
     removeColumn = input("Enter column name: ")
+    index = GENERATOR.COLUMNS.index(removeColumn)
     GENERATOR.COLUMNS.remove(removeColumn)
+    GENERATOR.FILES.remove(GENERATOR.FILES[index])
 # -------------------------------------------------------------------------------------------------
 
 
 def setFileForColumn(index):
     filePath = input("Enter filename (File must be in 'Data' folder): ")
-    GENERATOR.FILES[index] = filePath
+    if(index < len(GENERATOR.FILES)):
+        GENERATOR.FILES[index] = filePath
+    else:
+        GENERATOR.FILES.append(filePath)
 # -------------------------------------------------------------------------------------------------
 
 
