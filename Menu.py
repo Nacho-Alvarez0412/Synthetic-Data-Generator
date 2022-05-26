@@ -53,9 +53,10 @@ def menuColumAssign():
     menu = ConsoleMenu("CSV Synthetic Data Generator",
                        "Assign columns to data file", exit_option_text="Back")
 
-    menu_item = MenuItem("Menu Item")
-
-    menu.append_item(menu_item)
+    for i in range(0, len(GENERATOR.COLUMNS)):
+        function_item = FunctionItem(
+            GENERATOR.COLUMNS[i] + " - " + GENERATOR.FILES[i], setFileForColumn, [i])
+        menu.append_item(function_item)
 
     menu.show()
 # -------------------------------------------------------------------------------------------------
@@ -70,6 +71,12 @@ def addColumn():
 def deleteColumn():
     removeColumn = input("Enter column name: ")
     GENERATOR.COLUMNS.remove(removeColumn)
+# -------------------------------------------------------------------------------------------------
+
+
+def setFileForColumn(index):
+    filePath = input("Enter filename (File must be in 'Data' folder): ")
+    GENERATOR.FILES[index] = filePath
 # -------------------------------------------------------------------------------------------------
 
 
