@@ -2,6 +2,7 @@
 from consolemenu import *
 from consolemenu.items import *
 import Generator as Generator
+import os
 
 GENERATOR = Generator.csvGenerator()
 
@@ -24,14 +25,46 @@ def mainMenu():
 
 
 def menuGenCSV():
-    menu = ConsoleMenu("CSV Synthetic Data Generator",
-                       "Generate file", exit_option_text="Back")
+    askForRows()
+    askForHeader()
+    for column in GENERATOR.COLUMNS:
+        askForColumnConfig(column)
 
-    menu_item = MenuItem("Menu Item")
+    print("Generating file...")
+    GENERATOR.setData()
+    GENERATOR.generateCSV()
+# -------------------------------------------------------------------------------------------------
 
-    menu.append_item(menu_item)
 
-    menu.show()
+def askForRows():
+    response = input("Total rows: ")
+    if (response.isnumeric()):
+        GENERATOR.GeneratorJSON["Rows"] = int(response)
+    else:
+        GENERATOR.GeneratorJSON["Rows"] = 100
+    os.system('cls' if os.name == 'nt' else 'clear')
+# -------------------------------------------------------------------------------------------------
+
+
+def askForHeader():
+    response = input("Include header? [Y/N]: ")
+    if (response == "Y" or response == "YES"):
+        GENERATOR.GeneratorJSON["HeaderFlag"] = True
+    else:
+        GENERATOR.GeneratorJSON["HeaderFlag"] = False
+    os.system('cls' if os.name == 'nt' else 'clear')
+# -------------------------------------------------------------------------------------------------
+
+
+def askForColumnConfig(column):
+    response = input("For column: "+column +
+                     "\n\nAllow empty values? [Y/N]: ")
+    response.capitalize()
+    if (response == "Y" or response == "YES"):
+        GENERATOR.setForGeneration(column, True)
+    else:
+        GENERATOR.setForGeneration(column, False)
+    os.system('cls' if os.name == 'nt' else 'clear')
 # -------------------------------------------------------------------------------------------------
 
 
